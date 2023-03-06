@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+	crossorigin="anonymous">
+<style type="text/css">
+@media ( min-width : 1025px) {
+	.h-custom {
+		height: 100vh !important;
+	}
+}
+</style>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<p th:text="${username}">
+					</li>
+				</ul>
+				<form class="d-flex">
+					<button class="btn btn-outline-success" type="button"
+						data-bs-toggle="modal" data-bs-target="#exampleModal">Edit
+						Information</button>
+					<a class="btn btn-outline-success" onclick="logout()">Logout</a>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Modal -->
+	<div class="modal modal-lg fade" id="exampleModal" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<section class=" gradient-custom">
+					<div class="container py-5 h-100">
+						<div class="row justify-content-center align-items-center h-100">
+							<div class="col-12 col-lg-12 col-xl-12">
+								<div class="card shadow-2-strong card-registration"
+									style="border-radius: 15px;">
+									<div class="card-body p-4 p-md-5">
+										<h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration Form</h3>
+										<form action="#" th:action="@{/update}" method="post"
+											th:object="${employee}" id="employeeregistrationform">
+											<img th:src="*{profileUrl}" class="rounded-circle"
+												alt="Cinque Terre" width="100" height="100"
+												id="profileImagePrev"> <input type="hidden"
+												th:field="*{id}">
+											<div class="row">
+												<div class="col-md-6 mb-4">
+
+													<div class="form-outline">
+														<label class="form-label" for="firstName">Name</label> <input
+															type="text" id="name"
+															class="form-control form-control-lg" th:field="*{name}" />
+														<label id="namelabel" style="color: red;"></label>
+													</div>
+
+												</div>
+												<div class="col-md-6 mb-4">
+
+													<div class="form-outline">
+														<label class="form-label" for="password">Password</label>
+														<input type="hidden" id="password"
+															class="form-control form-control-lg"
+															th:field="*{password}"/> <label id="passwordlabel"
+															style="color: red;"></label>
+													</div>
+												</div>
+											</div>
+
+											<div class="row">
+												<div class="col-md-6 mb-4 d-flex align-items-center">
+
+													<div class="form-outline datepicker w-100">
+														<label for="birthdayDate" class="form-label">Birthday</label>
+														<input type="date" class="form-control" id="birthdayDate"
+															th:field="*{dob}" /> <label id="birthdayDatelabel"
+															style="color: red;"></label>
+													</div>
+
+												</div>
+												<div class="col-md-6 mb-4">
+
+													<h6 class="mb-2 pb-1">Gender:</h6>
+
+													<div class="form-check form-check-inline">
+														<label class="form-check-label" for="femaleGender">Female</label>
+														<input class="form-check-input" type="radio"
+															name="inlineRadioOptions" id="femaleGender"
+															th:field="*{gender}" th:value="Female" />
+													</div>
+
+													<div class="form-check form-check-inline">
+														<label class="form-check-label" for="maleGender">Male</label>
+														<input class="form-check-input" type="radio"
+															name="inlineRadioOptions" id="maleGender"
+															th:field="*{gender}" th:value="Male" />
+													</div>
+
+													<div class="form-check form-check-inline">
+														<label class="form-check-label" for="otherGender">Other</label>
+														<input class="form-check-input" type="radio"
+															name="inlineRadioOptions" id="otherGender"
+															th:field="*{gender}" th:value="others" />
+													</div>
+													<!-- <label id="genderSelectlable" style="color:red;">Please Select Gender.</label> -->
+												</div>
+											</div>
+											<!--  <label for="formFile" class="form-label">Upload Profile</label>
+						  <input class="form-control" type="file" id="formFile"> -->
+
+											<div class="row">
+												<div class="col-md-6 mb-4 d-flex align-items-center">
+
+													<div class="form-outline datepicker w-100">
+														<label for="birthdayDate" class="form-label">Upload
+															Profile</label> <input type="file" id="formFile"
+															class="form-control" /> <label id="formFilelable"
+															style="color: red;"></label> <input type="hidden"
+															id="profileurl" th:field="*{profileUrl}">
+													</div>
+
+												</div>
+												<div class="col-md-6">
+
+													<h6 class="mb-2 pb-1">Employment Type:</h6>
+													<select th:field="*{employementType}" class="form-control"
+														id="employementType">
+														<option th:each="emp : ${employmentTypes}"
+															th:value="${emp}" th:text="${emp}" />
+													</select>
+												</div>
+
+												<div class="row">
+													<div class="col-md-6 mb-4 pb-2">
+
+														<div class="form-outline">
+															<label class="form-label" for="emailAddress">Email</label>
+															<input type="email" id="emailAddress"
+																class="form-control form-control-lg" th:field="*{email}" />
+															<label id="emailAddresslable" style="color: red;"></label>
+														</div>
+
+													</div>
+													<div class="col-md-6 mb-4 pb-2">
+														<div class="form-outline">
+															<label class="form-label" for="phoneNumber">Phone
+																Number</label> <input type="tel" id="phoneNumber"
+																class="form-control form-control-lg"
+																th:field="*{phoneNumber}" /> <label
+																id="phoneNumberlable" style="color: red;"></label>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-md-12 mb-4 pb-2">
+														<div class="form-outline">
+															<label class="form-label" for="phoneNumber">Address</label>
+															<input type="text" id="address"
+																class="form-control form-control-lg"
+																th:field="*{address}" /> <label id="addresslable"
+																style="color: red;"></label>
+														</div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-md-6">
+														<h6 class="mb-2 pb-1">Employment Type:</h6>
+														<select th:field="*{departmentId}" class="form-control"
+															id="departmentType">
+															<option th:each="dept : ${departments}"
+																th:value="${dept.id}" th:text="${dept.name}" />
+														</select>
+													</div>
+
+													<div class="mt-4 pt-2">
+														<a class="btn btn-primary btn-lg" onclick="submit()" />Submit</a>
+														<button type="button" class="btn btn-secondary"
+															data-bs-dismiss="modal">Close</button>
+													</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+			</div>
+		</div>
+	</div>
+	<!----Information--->
+
+
+
+
+	<section class="vh-100 gradient-custom">
+		<div class="container py-5 h-100">
+			<div class="row justify-content-center align-items-center h-100">
+				<div class="col-12 col-lg-9 col-xl-7">
+					<div class="card shadow-2-strong card-registration"
+						style="border-radius: 15px;">
+						<div class="card-body p-4 p-md-5">
+							<!--     <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration Form</h3> -->
+							<!--  <form action="#" th:action="@{/register}" method="post" th:object="${employee}" id="employeeregistrationform"> -->
+							<img th:src="${employeeThis.profileUrl}" class="rounded-circle"
+								alt="Cinque Terre" width="100" height="100"
+								id="profileImagePrev">
+							<div class="row">
+								<div class="col-md-6 mb-4">
+
+									<div class="form-outline">
+										<label class="form-label" for="firstName">Name</label> <input
+											type="text" id="name" class="form-control form-control-lg"
+											th:value="${employeeThis.name}" disabled/>
+									</div>
+
+								</div>
+								<div class="col-md-6 mb-4">
+
+									<div class="form-outline">
+										<label class="form-label" for="password">Password</label> <input
+											type="text" class="form-control form-control-lg"
+											th:value="${employeeThis.password}" disabled/>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-6 mb-4 d-flex align-items-center">
+
+									<div class="form-outline datepicker w-100">
+										<label for="birthdayDate" class="form-label">Birthday</label>
+										<input class="form-control form-control-lg" th:value="${employeeThis.dob}" disabled/>
+									</div>
+
+								</div>
+								<div class="col-md-6 mb-4">
+									<h6 class="mb-2 pb-1">Gender:</h6>
+									<div class="form-check form-check-inline">
+										<input th:value="${employeeThis.gender}" class="form-control form-control-lg" disabled/>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<h6 class="mb-2 pb-1">Employment Type:</h6>
+									<input th:value="${employeeThis.employementType}" class="form-control form-control-lg" disabled>
+								</div>
+
+								<div class="row">
+									<div class="col-md-6 mb-4 pb-2">
+
+										<div class="form-outline">
+											<label class="form-label" for="emailAddress">Email</label> <input
+												type="email" class="form-control form-control-lg"
+												th:value="${employeeThis.email}" disabled/>
+										</div>
+
+									</div>
+									<div class="col-md-6 mb-4 pb-2">
+										<div class="form-outline">
+											<label class="form-label" for="phoneNumber">Phone
+												Number</label> <input type="tel"
+												class="form-control form-control-lg"
+												th:value="${employeeThis.phoneNumber}" disabled/>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-md-12 mb-4 pb-2">
+										<div class="form-outline">
+											<label class="form-label" for="phoneNumber">Address</label> <input
+												type="text" class="form-control form-control-lg"
+												th:value="${employeeThis.address}" disabled/>
+										</div>
+									</div>
+								</div>
+								
+								
+
+								<!--   </form> -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</section>
+
+
+
+
+	<!-- Imformation end -->
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.6.3.js"
+		integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+		crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		var urlId = null;
+		$(document)
+				.ready(
+						function() {
+							console.log("Jquery works");
+							//$("#femaleGender").prop("checked",true);
+							//$('#employementType option:eq(0)').prop('selected', true);
+							$("#name").change(function() {
+								if ($("#name").val().trim() == "") {
+									$("#namelabel").text("Please Enter name");
+									$("#namelabel").css("color", "red");
+									$("#name").val('');
+								} else {
+									$("#namelabel").text("");
+
+								}
+							});
+							$("#password").change(
+									function() {
+										if ($("#password").val().trim() == "") {
+											$("#passwordlabel").text(
+													"Please Enter name");
+											$("#passwordlabel").css("color",
+													"red");
+											$("#password").val('');
+										} else {
+											$("#passwordlabel").text("");
+
+										}
+									});
+
+							$("#birthdayDate")
+									.change(
+											function() {
+												var date = new Date();
+												if (new Date($("#birthdayDate")
+														.val()) >= (date)
+														.setFullYear(date
+																.getFullYear() - 18)) {
+													$("#birthdayDatelabel")
+															.text(
+																	"Please select dob for age>=18");
+													$("#birthdayDatelabel")
+															.css("color", "red");
+													$("#birthdayDate").val('');
+												} else {
+													$("#birthdayDatelabel")
+															.text("");
+
+												}
+											});
+
+							$("#formFile")
+									.change(
+											function() {
+												var file = this.files[0];
+												var ext = file.name.split('.')
+														.pop().toLowerCase();
+												if ($.inArray(ext, [ 'gif',
+														'png', 'jpg', 'jpeg' ]) == -1) {
+													$("#formFilelable")
+															.text(
+																	'invalid extension!');
+													$("#formFile").val(null);
+													return;
+												}
+												if (file.size >= 1048576) {
+													$("#formFile").val(null);
+													$("#formFilelable")
+															.text(
+																	'file size over than 1048576 byte.');
+													return;
+												}
+												$("#formFilelable").text('');
+												console.log(file.name,
+														file.size);
+												if (urlId != null) {
+													var settings = {
+														"url" : "http://localhost:8080/file/"
+																+ urlId,
+														"method" : "DELETE",
+														"timeout" : 0,
+													};
+
+													$
+															.ajax(settings)
+															.done(
+																	function(
+																			response) {
+																		console
+																				.log(response);
+																	});
+												}
+
+												var form = new FormData();
+												form.append("file", file);
+												var settings = {
+													"url" : "/file/upload",
+													"method" : "POST",
+													"timeout" : 0,
+													"processData" : false,
+													"mimeType" : "multipart/form-data",
+													"contentType" : false,
+													"data" : form
+												};
+
+												$
+														.ajax(settings)
+														.done(
+																function(
+																		response) {
+																	console
+																			.log(response);
+																	response = JSON
+																			.parse(response);
+																	console
+																			.log(
+																					response.url,
+																					response.id);
+																	$(
+																			"#profileurl")
+																			.val(
+																					response.url);
+																	urlId = response.id;
+																	console
+																			.log(
+																					$(
+																							"#profileurl")
+																							.val(),
+																					urlId,
+																					"===============");
+																});
+											});
+
+							$("#emailAddress")
+									.change(
+											function() {
+												if ($("#emailAddress").val()
+														.trim() == "") {
+													$("#emailAddresslable")
+															.text(
+																	"Please Enter valid name");
+													$("#emailAddresslable")
+															.css("color", "red");
+													$("#emailAddress").val('');
+												} else {
+													$("#emailAddresslable")
+															.text("");
+												}
+
+												if ($("#emailAddress")
+														.val()
+														.match(
+																/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+													$("#emailAddresslable")
+															.text("");
+												} else {
+													$("#emailAddresslable")
+															.text(
+																	"Please Enter valid email");
+													$("#emailAddresslable")
+															.css("color", "red");
+													$("#emailAddress").val('');
+												}
+											});
+
+							$("#phoneNumber")
+									.change(
+											function() {
+												var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+												if ($("#phoneNumber").val()
+														.match(phoneno)) {
+													$('#phoneNumber').text("");
+													$('#phoneNumberlable')
+															.text("");
+												} else {
+													$('#phoneNumberlable')
+															.text(
+																	"Please enter valid phone number.");
+												}
+											});
+
+							$("#address")
+									.change(
+											function() {
+												if ($("#address").val().trim() == "") {
+													$("#addresslable")
+															.text(
+																	"Please enter valid address.");
+													$("#address").val('');
+												} else {
+													$("#addresslable").text("");
+												}
+											});
+						});
+
+		function submit() {
+
+			//name part
+			if ($("#name").val().trim() == "") {
+				$("#namelabel").text("Please Enter name");
+				$("#namelabel").css("color", "red");
+				$("#name").val('');
+				return;
+			} else {
+				$("#namelabel").text("");
+
+			}
+
+			//password part
+			/* if ($("#password").val().trim() == "") {
+				$("#passwordlabel").text("Please Enter name");
+				$("#passwordlabel").css("color", "red");
+				$("#password").val('');
+				return;
+			} else {
+				$("#passwordlabel").text("");
+
+			} */
+
+			//Birthday
+			if ($("#birthdayDate").val() == "") {
+				$("#birthdayDatelabel").text("Please select dob for age>=18");
+				$("#birthdayDatelabel").css("color", "red");
+				return;
+			}
+			var date = new Date();
+			if (new Date($("#birthdayDate").val()) >= (date).setFullYear(date
+					.getFullYear() - 18)) {
+				$("#birthdayDatelabel").text("Please select dob for age>=18");
+				$("#birthdayDatelabel").css("color", "red");
+				$("#birthdayDate").val('');
+				return;
+			} else {
+				$("#birthdayDatelabel").text("");
+			}
+
+			//file
+			var files = $("#profileurl");
+			if (files.val().length < 2) {
+				$("#formFilelable").text('invalid please upload file!');
+				return;
+			}
+			//email part
+
+			if ($("#emailAddress").val().trim() == "") {
+				$("#emailAddresslable").text("Please Enter valid name");
+				$("#emailAddresslable").css("color", "red");
+				$("#emailAddress").val('');
+				return;
+			} else {
+				$("#emailAddresslable").text("");
+			}
+
+			if ($("#emailAddress").val().match(
+					/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/)) {
+				$("#emailAddresslable").text("");
+			} else {
+				$("#emailAddresslable").text("Please Enter valid email");
+				$("#emailAddresslable").css("color", "red");
+				$("#emailAddress").val('');
+				return;
+			}
+
+			//phone number
+
+			var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+			if (!$("#phoneNumber").val().match(phoneno)) {
+				$('#phoneNumberlable').text("Please enter valid phone number.");
+				return;
+			} else {
+				$('#phoneNumberlable').text("");
+			}
+			if ($("#address").val().trim() == "") {
+				$("#addresslable").text("Please enter valid address.");
+				$("#address").val('');
+				return;
+			} else {
+				$("#addresslable").text("");
+			}
+
+			//final submit
+
+			$("#employeeregistrationform").submit();
+
+		}
+		
+		
+		
+		function logout() {
+			let info = JSON.parse(localStorage.getItem('authInfo'));
+			if(info==null) {
+				location.href = "/logout";
+				return;
+			}
+	        fetch("https://oauth2.googleapis.com/revoke?token=" + info['access_token'],
+	            {
+	                method: 'POST',
+	                headers: {
+	                    "Content-type": "application/x-www-form-urlencoded"
+	                }
+	            })
+	            .then((data) => {
+	            	localStorage.removeItem('authInfo');
+	                location.href = "/logout"
+	            })
+	    }
+	</script>
+</body>
+</html>
