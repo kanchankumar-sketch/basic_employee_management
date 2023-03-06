@@ -17,9 +17,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.gridscape.employeemanagement.dto.LoginModel;
 import com.gridscape.employeemanagement.model.Employee;
+import com.gridscape.employeemanagement.model.UserLoginRecord;
 import com.gridscape.employeemanagement.service.DepartmentService;
 import com.gridscape.employeemanagement.service.EmployeeService;
 import com.gridscape.employeemanagement.service.EncryptionService;
+import com.gridscape.employeemanagement.service.UserLoginRecordService;
 
 @RestController
 public class MVC {
@@ -29,6 +31,9 @@ public class MVC {
 
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private UserLoginRecordService loginRecordService;
 
 	@GetMapping("/home")
 	public ModelAndView home(ModelAndView andView, HttpServletRequest httpServletRequest) {
@@ -105,7 +110,8 @@ public class MVC {
 			employee = this.employeeService.loginEmailAndPassword(loginModel);
 		}
 		if (employee != null) {
-			System.out.println(new Date());
+			System.out.println(employee.getEmail()+"--"+(new Date()));
+			this.loginRecordService.saveRecord(new UserLoginRecord(null,employee.getEmail(),new Date()));
 			andView.setViewName("redirect:/home");
 			session.setAttribute("email", employee.getEmail());
 			return andView;
