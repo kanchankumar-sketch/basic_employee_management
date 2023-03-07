@@ -19,8 +19,13 @@ public class UserLoginRecordController {
 	@Autowired
 	private UserLoginRecordService loginRecordService;
 	
-	@GetMapping("/{email}")
-	public List<UserLoginRecord> getRecords(@PathVariable("email")  String email){
-		return this.loginRecordService.getrecordbyEmail(email);
+	@GetMapping
+	public List<UserLoginRecord> getRecords(){
+		return this.loginRecordService.getrecord();
+	}
+	
+	@GetMapping("/data")
+	public List<List<Long>> getData(){
+		return this.loginRecordService.getAllData();
 	}
 }

@@ -1,5 +1,6 @@
 package com.gridscape.employeemanagement.controller;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -110,8 +111,7 @@ public class MVC {
 			employee = this.employeeService.loginEmailAndPassword(loginModel);
 		}
 		if (employee != null) {
-			System.out.println(employee.getEmail()+"--"+(new Date()));
-			this.loginRecordService.saveRecord(new UserLoginRecord(null,employee.getEmail(),new Date()));
+			this.loginRecordService.saveRecord(System.currentTimeMillis());
 			andView.setViewName("redirect:/home");
 			session.setAttribute("email", employee.getEmail());
 			return andView;

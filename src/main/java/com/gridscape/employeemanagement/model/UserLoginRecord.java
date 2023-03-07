@@ -1,7 +1,5 @@
 package com.gridscape.employeemanagement.model;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +18,6 @@ public class UserLoginRecord {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String email;
-	private Date date;
+	private Long counts;
+	private Long timestamps;
 }
